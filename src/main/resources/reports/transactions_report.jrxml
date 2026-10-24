@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="transactions_report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<queryString>
+		<![CDATA[SELECT 'IN' AS type, DATE_FORMAT(si.received_date, '%Y-%m-%d') AS txn_date, p.code, p.name, si.quantity, s.name AS party, si.unit_cost * si.quantity AS amount FROM stock_in si JOIN products p ON si.product_id = p.id JOIN suppliers s ON si.supplier_id = s.id UNION ALL SELECT 'OUT' AS type, DATE_FORMAT(so.issue_date, '%Y-%m-%d') AS txn_date, p.code, p.name, so.quantity, c.name AS party, so.unit_price * so.quantity AS amount FROM stock_out so JOIN products p ON so.product_id = p.id JOIN customers c ON so.customer_id = c.id ORDER BY txn_date DESC]]>
+	</queryString>
+	<field name="type" class="java.lang.String"/>
+	<field name="txn_date" class="java.lang.String"/>
+	<field name="code" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="quantity" class="java.lang.Integer"/>
+	<field name="party" class="java.lang.String"/>
+	<field name="amount" class="java.math.BigDecimal"/>
+	<title>
+		<band height="70">
+			<staticText>
+				<reportElement x="0" y="5" width="555" height="30"/>
+				<textElement textAlignment="Center"><font size="18" isBold="true"/></textElement>
+				<text><![CDATA[Stock Transactions Report]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="40" width="555" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Inventory and Stock Control System  |  Generated: " + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="26">
+			<staticText>
+				<reportElement mode="Opaque" backcolor="#D9D9D9" x="0" y="0" width="40" height="24"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"><font isBold="true"/></textElement>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" backcolor="#D9D9D9" x="40" y="0" width="75" height="24"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"><font isBold="true"/></textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" backcolor="#D9D9D9" x="115" y="0" width="60" height="24"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"><font isBold="true"/></textElement>
+				<text><![CDATA[Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" backcolor="#D9D9D9" x="175" y="0" width="140" height="24"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"><font isBold="true"/></textElement>
+				<text><![CDATA[Product]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" backcolor="#D9D9D9" x="315" y="0" width="40" height="24"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"><font isBold="true"/></textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" backcolor="#D9D9D9" x="355" y="0" width="100" height="24"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"><font isBold="true"/></textElement>
+				<text><![CDATA[Supplier / Customer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" backcolor="#D9D9D9" x="455" y="0" width="100" height="24"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"><font isBold="true"/></textElement>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="40" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="40" y="0" width="75" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{txn_date}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="115" y="0" width="60" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="175" y="0" width="140" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="315" y="0" width="40" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="355" y="0" width="100" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{party}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="455" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="21" width="555" height="1" forecolor="#BBBBBB"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="25">
+			<textField>
+				<reportElement x="0" y="3" width="555" height="18"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
